@@ -1,0 +1,66 @@
+<div class="row text-center ">
+  <div ng-if="errMessage" class="col-sm-12 text-error error-message" *ngIf="errMessage !='' && !successMsg">
+    {{errMessage}}</div>
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+  <div class="alert alert-success" *ngIf="successMsg">
+    Details updated successfully !
+    </div>
+</div>
+  <!--<div ng-if="errMessage" class="col-sm-12 text-success" *ngIf="successMsg">
+    Details updated successfully ! </div>-->
+
+
+
+<div class="row">
+  <div class="col-sm-12">
+    <h2>Reporting Manager Mapping
+    </h2>
+
+    <form class="form-inline col-xs-offset-1"  name="map_reporting_managers_form">
+      <div class="form-group">
+        <label class="control-label" for="start_date">Select Employee</label>
+          <select class="form-control" [(ngModel)]="assignReportingManager" name="employees">
+            <option *ngFor="let c of employeeDetail" [ngValue]="c">{{c.employee_name | capitalise}}</option>
+          </select>
+      </div>
+      <div class="form-group">
+          <button class="btn btn-primary" (click)="getReportingManager()">Submit</button>
+          <button type="reset" class="btn btn-default" (click)="resetDataView()" >Clear</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    &nbsp;
+  </div>
+</div>
+<div class="row" *ngIf="reportingManagersDetail.length>0 && hideDataView">
+  <div class="col-xs-offset-1 col-xs-11">
+    <form class="form-inline">
+      <div class="form-group" *ngFor="let r of reportingManagersDetail;let i of index"  [attr.data-index]="i" >
+        <div class="col-xs-12">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name = "assignReportingManager" [checked]="r.reporting_employee_id"
+              (change)="updateCheckedValue(r.employee_email,$event)"/>
+              {{r.employee_name | capitalise}}
+            </label>
+          </div>
+        </div>
+      </div>
+    </form>
+  <br>
+    <div class="form-group">
+      <button class="btn btn-success" (click)="saveReportingManager()">Save</button>
+      <button type="reset" class="btn btn-default" (click)="resetManagers()" >Reset</button>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    &nbsp;
+  </div>
+</div>

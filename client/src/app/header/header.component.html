@@ -1,0 +1,157 @@
+<div class="container" id="wrap">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<nav class="navbar navbar-inverse navbar-fixed-top">
+					<div class="row">
+						<div class="col-xs-6 col-sm-2 col-md-1 col-lg-1">
+							<!-- Brand and toggle get grouped for better mobile display -->
+		                    <header class="navbar-header">
+								<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+		                        	<span class="sr-only">Toggle navigation</span>
+									<span class="icon-bar"></span>
+		                            <span class="icon-bar"></span>
+		                            <span class="icon-bar"></span>
+		                        </button>
+		                        <a  class="navbar-brand"><img src="assets/img/ionixx.png" height="35" alt=""></a>
+							</header>
+						</div>
+						<div class="col-xs-4 col-sm-6 col-md-7 col-lg-7 hidden-xs">
+							<div class="collapse navbar-collapse">
+								<!-- .nav -->
+								<ul class="nav navbar-nav">
+								    <li><a [routerLink]="['/summary']">Assessment</a></li>
+								    <li *ngIf="isEmployee() || isLead() || isManager() "><a [routerLink]="['/holiday']">Holiday</a></li>
+								    <li class='dropdown'>
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								             Requests <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+								            <li><a routerLink="/leave-request">Leave Request</a></li>
+                            				<li><a routerLink="/permission-request">Permission Request</a></li>
+                            				<li><a routerLink="/compoff-request">Compoff Request</a></li>
+                        				</ul>
+                  					</li>
+								    <li class='dropdown'  *ngIf="isManager() || isLead()">
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								            Manage Resource <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+								            <li><a routerLink="/my-request">My Requests</a></li>
+								            <li><a routerLink="/my-project">My Projects</a></li>
+								            <li><a routerLink="/my-reminder">My Reminders</a></li>
+                            				<li *ngIf="isManager()" ><a routerLink="/all-request">All Request</a></li>
+
+								        </ul>
+								    </li>
+								    <li class='dropdown'  *ngIf="isManager() || isLead() || isAdmin()">
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								            Manage Requests <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+								            <li><a routerLink="/manage-leave">Manage Leave</a></li>
+								            <li><a routerLink="/manage-permission">Manage Permission</a></li>
+								            <li><a routerLink="/manage-compoff">Manage CompOff</a></li>
+								        </ul>
+								    </li>
+								    <li class='dropdown' *ngIf="isAdmin() || isReadOnly()">
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								            Admin <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+								            <li *ngIf="isAdmin()"><a routerLink="/list-assessment">Assessment</a></li>
+								            <li *ngIf="isAdmin()"><a routerLink="/assessment-parameter">Assessment Parameter</a></li>
+								            <li *ngIf="isAdmin()"><a routerLink="/period">Assessment Period</a></li>
+											   <li *ngIf="isAdmin()"><a routerLink="/employee">Employees</a></li>
+											   <li *ngIf="isAdmin()"><a routerLink="/reporting-manager">Add Reporting Manager</a></li>
+                                   			<li *ngIf="isAdmin() || isReadOnly()"><a routerLink="/all-projects">All Projects</a></li>
+                                   			<li *ngIf="isAdmin()"><a routerLink="/CalendarSettings">Calendar Settings</a></li>
+                                    			<li *ngIf="isAdmin()"><a routerLink="/location">Branch</a></li>
+                                   			<li *ngIf="isAdmin()"><a routerLink="/department">Department</a></li>
+                                   			<li *ngIf="isAdmin()"><a routerLink="/admin-holiday">Holiday</a></li>
+								        </ul>
+								    </li>
+								</ul>
+								<!-- /.nav -->
+		                    </div>
+						</div>
+
+						<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 text-right nav-btn">
+              				<ul class="nav navbar-nav navbar-right">
+                				<li>
+                  					<a  class="color-white dropdown-toggle username-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    					{{this.storedDetails.employee_name | capitalise}} <span class="caret"></span>
+                 	 				</a>
+                  					<ul class="dropdown-menu">
+                    					<li><a [routerLink]='["/MyProfile"]'>My Profile</a></li>
+                    				    <li><a [routerLink]='["/EmployeeHistory"]'>Employee History</a></li>
+										<li><a  (click)="logout()">Logout</a></li>
+                  					</ul>
+                				</li>
+              				</ul>
+						</div>
+						<!-- Menu for small devices -->
+						<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 visible-xs">
+							<aside class="collapse navbar-collapse navbar-ex1-collapse" #menu>
+								<!-- .nav -->
+								<ul class="nav navbar-nav">
+								    <li><a [routerLink]="['/summary']" menuClose [menu]="menu">Assessment</a></li>
+								    <li *ngIf="isEmployee() || isLead()"><a [routerLink]="['/holiday']" menuClose [menu]="menu">Holiday</a></li>
+								    <li class='dropdown'>
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								             Requests <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+								            <li><a routerLink="/leave-request" menuClose [menu]="menu">Leave Request</a></li>
+                            				<li><a routerLink="/permission-request" menuClose [menu]="menu">Permission Request</a></li>
+                            				<li><a routerLink="/compoff-request" menuClose [menu]="menu">Compoff Request</a></li>
+                        				</ul>
+                  					</li>
+								    <li class='dropdown'  *ngIf="isManager() || isLead()">
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								            Manage Resource <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+								            <li><a routerLink="/my-request" menuClose [menu]="menu">My Requests</a></li>
+								            <li><a routerLink="/my-project" menuClose [menu]="menu">My Projects</a></li>
+								            <li><a routerLink="/my-reminder" menuClose [menu]="menu">My Reminders</a></li>
+                            				<li *ngIf="isManager()" ><a routerLink="/all-request" menuClose [menu]="menu">All Request</a></li>
+
+								        </ul>
+								    </li>
+								    <li class='dropdown'  *ngIf="isManager() || isLead() || isAdmin()">
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								            Manage Requests <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+								            <li><a routerLink="/manage-leave" menuClose [menu]="menu">Manage Leave</a></li>
+								            <li><a routerLink="/manage-permission" menuClose [menu]="menu">Manage Permission</a></li>
+								            <li><a routerLink="/manage-compoff" menuClose [menu]="menu">Manage CompOff</a></li>
+								        </ul>
+								    </li>
+								    <li class='dropdown' *ngIf="isAdmin() || isReadOnly()">
+								        <a class="dropdown-toggle" data-toggle="dropdown">
+								            Admin <b class="caret"></b>
+								        </a>
+								        <ul class="dropdown-menu">
+                                        <li *ngIf="isAdmin() || isReadOnly()"><a routerLink="/all-projects" menuClose [menu]="menu">All Projects</a></li>
+                                        <li *ngIf="isAdmin()"><a routerLink="/list-assessment" menuClose [menu]="menu">Assessment</a></li>
+								                        <li *ngIf="isAdmin()"><a routerLink="/assessment-parameter" menuClose [menu]="menu">Assessment Parameter</a></li>
+								                        <li *ngIf="isAdmin()"><a routerLink="/period" menuClose [menu]="menu">Assessment Period</a></li>
+                                   			<li *ngIf="isAdmin()"><a routerLink="/employee" menuClose [menu]="menu">Employees</a></li>
+                                        <li *ngIf="isAdmin()"><a routerLink="/reporting-manager" menuClose [menu]="menu">Add Reporting Manager</a></li>
+                                       <li *ngIf="isAdmin()"><a routerLink="/list-assessment" menuClose [menu]="menu">Calendar Settings</a></li>
+                                   			<li *ngIf="isAdmin()"><a routerLink="/location" menuClose [menu]="menu">Branch</a></li>
+                                   			<li *ngIf="isAdmin()"><a routerLink="/department" menuClose [menu]="menu">Department</a></li>
+                                   			<li *ngIf="isAdmin()"><a routerLink="/admin-holiday" menuClose [menu]="menu">Holiday</a></li>
+								        </ul>
+								    </li>
+								</ul>
+								<!-- /.nav -->
+		                    </aside>
+						</div>
+					</div>
+                </nav>
+			</div>
+		</div>
+
+	</div>

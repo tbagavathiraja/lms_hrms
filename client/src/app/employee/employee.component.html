@@ -1,0 +1,72 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+		<div class="alert alert-success" *ngIf="success">
+		  {{success_message}}.
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><h2>Employee</h2></div>
+			<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4 text-right margin-top-20px">
+				<input type="text" formControlname="search" (keyup.enter)="get_all_employee()" placeholder="Search" class="form-control" [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+			</div>
+			<div class="col-xs-4 col-sm-1 col-md-1 col-lg-1 text-right margin-top-20px	adding-left-0px">
+				<button type="button" (click)="get_all_employee()" class="btn btn-info btn-padding">
+					<span class="glyphicon glyphicon-search hidden-xs"></span> Search
+				</button>
+			</div>
+			<div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 text-right">
+				<h2><a class="font-30" [routerLink]="['/employee/add']" title="Add Employee"><i class="fa fa-plus-circle" aria-hidden="true"></i></a></h2>
+			</div>
+		</div>
+		
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-responsive" *ngIf="!isLoading && itemCount > 0">
+        <data-table id="employees-grid" headerTitle=""[indexColumn]="false" [items]="items" [substituteRows]="false" [limit]="15" [itemCount]="itemCount" (reload)="reloadItems($event)">
+        	<data-table-column [property]="'employee_number'" [header]="'Number'" width="10%" [sortable]="true">
+        		<template #dataTableCell let-item="item">
+		            <div [textContent]="item.employee_number"  class="text-right"></div>
+		        </template>
+        	</data-table-column>
+        	<data-table-column [property]="'employee_name'" [header]="'Name'" width="25%" [sortable]="true"></data-table-column>
+        	<data-table-column [property]="'employee_email'" [header]="'Email'" width="37%" [sortable]="true"></data-table-column>
+        	<data-table-column [property]="'designation'" [header]="'Designation'" width="20%" [sortable]="true"></data-table-column>
+        	<data-table-column [property]="'Action'" [header]="'Action'" width="8%" [resizable]="true">
+	            <ng-template #dataTableCell let-item="item">
+	            	<div class="text-center">
+	    	            <a routerLink="/employee/edit/{{item.employee_email}}" title="Edit Employee">
+	    	            	<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+	    	            </a> 
+	    	            | 
+	    	            <a (click)="delete_employee(item.employee_email,deleteModal)" title="Delete Employee">
+	    	            	<i class="fa fa-trash-o" aria-hidden="true"></i>
+	    	            </a>
+    	            </div>
+            	</ng-template>
+        	</data-table-column>
+    	</data-table>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading && itemCount ==0">
+    	<div class="well">
+      		<p class="text-center">No Employee Found</p>
+    	</div>
+  	</div>
+</div>
+
+
+<modal #deleteModal>
+  <modal-header>
+    <h3>Delete Confirmation</h3>
+  </modal-header>
+  <modal-content>
+    <p>Are you sure want to delete employee ? </p>
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-danger" (click)="delete_confirm(deleteModal)">Delete</button>
+    <button class="btn btn-close" (click)="deleteModal.close()">Close</button>
+  </modal-footer>
+</modal>

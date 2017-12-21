@@ -1,0 +1,90 @@
+
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+    <img src="assets/img/loading-large.gif" />
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+    <div class="alert alert-success" *ngIf="success">
+      {{success_message}}.
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+  <div class="alert alert-danger" *ngIf="error_status">
+    {{errMessage}}.
+  </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><h2>CALENDAR SETTINGS</h2></div>
+    </div>
+
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-responsive">
+    <div class="row">
+      <div class="col-md-5 col-xs-5 col-sm-5">
+        <label>Branch</label>
+        <select name="location" class="form-control calendar-location" [(ngModel)]="calendarform.location_id" (ngModelChange)="onChange($event)">
+          <option value = "" disabled [selected]="calendarform.location_id == ''">Select Location</option>
+          <option *ngFor="let branch_name of branches"  [value]="branch_name.location_id">{{branch_name.location_name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5 col-xs-5 col-sm-5">
+        <label>Working Days</label>
+        <table style="width:100%;">
+          <tr>
+            <th class="left">Days of the week</th>
+            <th colspan="2">Holiday/Working</th>
+           <tr>
+            <td class="left">Monday</td>
+            <td><input type="radio" name="w1" (change)="clicked(0,false)" [checked]="!calendarform.isWorking[0]" class="holiday">Holiday</td>
+            <td><input type="radio" name="w1" (change)="clicked(0,true)" [checked]="calendarform.isWorking[0]" class="working" >Working</td>
+          </tr>
+          <tr>
+            <td class="left">Tuesday</td>
+            <td><input type="radio" name="w2" (change)="clicked(1,false)" [checked]="!calendarform.isWorking[1]" class="holiday">Holiday</td>
+            <td><input type="radio" name="w2" (change)="clicked(1,true)" [checked]="calendarform.isWorking[1]" class="working">Working</td>
+          </tr>
+          <tr>
+            <td class="left">Wednesday</td>
+            <td><input type="radio" name="w3" (change)="clicked(2,false)" [checked]="!calendarform.isWorking[2]" class="holiday">Holiday</td>
+            <td><input type="radio" name="w3" (change)="clicked(2,true)" [checked]="calendarform.isWorking[2]" class="working">Working</td>
+          </tr>
+          <tr>
+            <td class="left">Thursday</td>
+            <td><input type="radio" name="w4" (change)="clicked(3,false)" [checked]="!calendarform.isWorking[3]" class="holiday" >Holiday</td>
+            <td><input type="radio" name="w4" (change)="clicked(3,true)" [checked]="calendarform.isWorking[3]" class="working">Working</td>
+          </tr>
+          <tr>
+            <td class="left">Friday</td>
+            <td><input type="radio" name="w5" (change)="clicked(4,false)" [checked]="!calendarform.isWorking[4]" class="holiday">Holiday</td>
+            <td><input type="radio" name="w5" (change)="clicked(4,true)" [checked]="calendarform.isWorking[4]" class="working">Working</td>
+          </tr>
+          <tr>
+            <td class="left">Saturday</td>
+            <td><input type="radio" name="w6" (change)="clicked(5,false)" [checked]="!calendarform.isWorking[5]" class="holiday">Holiday</td>
+            <td><input type="radio" name="w6" (change)="clicked(5,true)" [checked]="calendarform.isWorking[5]" class="working">Working</td>
+          </tr>
+          <tr>
+            <td class="left">Sunday</td>
+            <td><input type="radio" name="w7" (change)="clicked(6,false)" [checked]="!calendarform.isWorking[6]" class="holiday">Holiday</td>
+            <td><input type="radio" name="w7" (change)="clicked(6,true)" [checked]="calendarform.isWorking[6]" class="working">Working</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5 col-xs-5 col-sm-5 height-10px"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-5 col-xs-5 col-sm-5">
+        <button type="button" class="btn btn-primary button" (click)="submit()">Submit</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+

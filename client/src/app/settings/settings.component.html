@@ -1,0 +1,47 @@
+
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+    <img src="assets/img/loading-large.gif" />
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+    <div class="alert alert-success" *ngIf="success">
+      {{success_message}}.
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><h2>SETTINGS</h2></div>
+    </div>
+
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-responsive" *ngIf="!isLoading && itemCount > 0">
+
+    <data-table id="settings-grid" headerTitle="" [indexColumn]="false" [items]="items" [substituteRows]="false" [limit]="15" [itemCount]="itemCount" (reload)="reloadItems($event)">
+      <data-table-column [property]="'settings_id'" [header]="'Setting ID'" width="8%" [sortable]="true">
+        <template #dataTableCell let-item="item">
+          <div  class="text-right">{{item.settings_id}}</div>
+        </template>
+      </data-table-column>
+      <data-table-column [property]="'remainder_days'" [header]="'Remainder Days'" width="8%" [sortable]="true">
+        <template #dataTableCell let-item="item">
+          <div  class="text-right">{{item.remainder_days}}</div>
+        </template>
+      </data-table-column>
+      <data-table-column [property]="'compoff_expiry'" [header]="'Compoff Expiry'" width="8%" [sortable]="true">
+        <template #dataTableCell let-item="item">
+          <div  class="text-right">{{item.compoff_expiry}}</div>
+        </template>
+      </data-table-column>
+      <data-table-column [property]="'Action'" [header]="'Action'" width="10%" [resizable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-center">
+            <a  routerLink="/settings/edit/{{item.settings_id}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+          </div>
+        </ng-template>
+      </data-table-column>
+    </data-table>
+  </div>
+</div>
+
+

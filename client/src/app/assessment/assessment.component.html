@@ -1,0 +1,277 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+	<img src="assets/img/loading-large.gif" />
+</div>
+</div>
+<div class="row" *ngIf="errMessage !='' && !successMsg && !isLoading">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message">
+		<div class="alert alert-danger">
+		  {{errMessage}}.
+		</div>
+	</div>
+</div>
+<div class="row" *ngIf="successMsg && !isLoading">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message">
+		<div class="alert alert-success">
+		  Details updated successfully !
+		</div>
+	</div>
+</div>
+<div class="row " *ngIf="!isLoading">
+  <div class="col-md-6">
+    <h2 class="title_left_align red-color">Assessment Details</h2>
+  </div>
+  <div class="col-md-6 text-right">
+    <h2><a class="font-30" [routerLink]="['/summary']" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+  </div>
+</div>
+<div class="row " *ngIf="!isLoading">
+  <div class="col-md-12 table-responsive">
+    <!-- <h2 class="title_left_align">Assessment Details</h2> -->
+    <hr>
+    <table class="table table-bordered table-inverse table1 table_font_size" id="table1">
+      <colgroup>
+        <col span="1" style="width:15%">
+        <col span="1" style="width:50%">
+        <col span="1" style="width:15%">
+        <col span="1" style="width:20%">
+      </colgroup>
+      <thead>
+      </thead>
+      <tbody>
+      <tr >
+      	<td colspan="4" class="text-center"><strong>Employee Details</strong></td>
+      </tr>
+      <tr >
+        <td scope="row" class="employee_table_heading_color text-left bold">Employee Name</td>
+        <td class="text-left no-wrap">{{employeeDetail.employee_name | capitalise}}</td>
+        <td scope="row" class="employee_table_heading_color text-left bold">Employee ID</td>
+        <td class="text-left">{{employeeDetail.employee_number|numberFixedLen:3}}</td>
+      </tr>
+      <tr>
+        <td scope="row" class="employee_table_heading_color text-left bold">Designation</td>
+        <td class="text-left no-wrap">{{employeeDetail.designation |capitalise}}</td>
+        <td scope="row" class="employee_table_heading_color text-left bold">Date of Joining</td>
+        <td class="text-left"class="text-left">{{employeeDetail.date_of_joining |normalDate}}</td>
+      </tr>
+      <tr>
+        <td class="vertical_text employee_table_heading_color text-left bold" scope="row">Reporting Manager</td>
+        <td class="vertical_text wrapword text-left no-wrap">{{employeeDetail.reporting_manager |capitalise}}</td>
+        <td scope="row" class="employee_table_heading_color text-left bold">Period</td>
+        <td class="text-left"class="text-left">{{employeeDetail.start_date |dateFormatPipe |uppercase}} <span *ngIf="employeeDetail?.end_date">to</span> {{employeeDetail.end_date |dateFormatPipe |uppercase}}</td>
+      </tr>
+      <tr>
+
+        <td class="vertical_text wrapword employee_table_heading_color text-left bold" scope="row">Project</td>
+        <td class="vertical_text wrapword text-left no-wrap">{{employeeDetail.projects |capitalise}}</td>
+        <td scope="row" class="employee_table_heading_color text-left bold">Location</td>
+        <td class="text-left"class="text-left">{{employeeDetail.location |capitalise}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered table-inverse table_font_size" style="width:100%">
+      <colgroup *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )">
+        <col span="1" style="width: 16%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 45%;">
+        <col span="1" style="width: 14%;">
+        <col span="1" style="width: 15%;">
+      </colgroup>
+
+      <colgroup *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )">
+        <col span="1" style="width: 16%;">
+        <col span="1" style="width: 7%;">
+        <col span="1" style="width: 24%;">
+        <col span="1" style="width: 24%;">
+        <col span="1" style="width: 7%;">
+        <col span="1" style="width: 7%;">
+        <col span="1" style="width: 7%;">
+        <col span="1" style="width: 8%;">
+      </colgroup>
+
+      <colgroup *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )">
+        <col span="1" style="width: 16%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 45%;">
+        <col span="1" style="width: 14%;">
+        <col span="1" style="width: 15%;">
+      </colgroup>
+
+      <thead>
+      <tr>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="table_border_width text-center" colspan="5">Rating Scale (1 - 10)</td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="table_border_width text-center" colspan="8">Rating Scale (1 - 10)</td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" class="table_border_width text-center" colspan="5">Rating Scale (1 - 10)</td>
+
+      </tr>
+      <tr>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="table_border_width text-center" colspan="5">1 - Below Expectation, 5 - Meeting Expectation, 8 - Exceeding Expectation, 10 - Out Standing.</td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="table_border_width text-center" colspan="8">1 - Below Expectation, 5 - Meeting Expectation, 8 - Exceeding Expectation, 10 - Out Standing.</td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" class="table_border_width text-center" colspan="5">1 - Below Expectation, 5 - Meeting Expectation, 8 - Exceeding Expectation, 10 - Out Standing.</td>
+      </tr>
+      <tr>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="table_border_width" colspan="5"></td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="table_border_width" colspan="8"></td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" class="table_border_width" colspan="5"></td>
+      </tr>
+      <tr align="center">
+        <th scope="row" class="center_text table_heading_size table_border_width">KRA/Skills</th>
+
+        <th scope="row" class="center_text table_heading_size table_border_width">Weightage</th>
+
+        <th scope="row" class="center_text table_heading_size table_border_width">Achievements</th>
+        <th *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" scope="row" class="center_text table_heading_size table_border_width">Apraiser Comments</th>
+        <th scope="row" style="width:10%;" class="center_text table_heading_size table_border_width">Apraisee<br> Rating</th>
+        <th *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" scope="row" style="width:10%;" class="center_text table_heading_size table_border_width">Apraisee <br>Weightage</th>
+        <th *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id) " scope="row" class="center_text table_heading_size table_border_width">Apraiser Rating</th><th scope="row" class="center_text table_heading_size table_border_width">Apraiser Weightage</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr>
+        <td colspan="5" *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="text-center" style="font-size:13px !important;"><strong>PART 1: Key Result Area</strong> </td>
+        <td colspan="8" *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="text-center" style="font-size:13px !important;"><strong>PART 1: Key Result Area</strong> </td>
+        <td colspan="5" *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" class="text-center" style="font-size:13px !important;"><strong>PART 1: Key Result Area</strong> </td>
+      </tr>
+
+      <tr class="params" *ngFor="let kraitem of assessmentDetail | keyValues" >
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA'" class="parrameter vertical_text  text-center">{{kraitem.value.assessment_parameter}}</td>
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA'" class="parameter_weightage vertical_text rating_label text-right vertical-middle">{{kraitem.value.parameter_weightage}}</td>
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA' " class="wrappretag vertical_text text-left vertical-middle">
+          <pre *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL'">{{kraitem.value.apraisee_comments}}</pre>
+          <textarea *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='NEED_TO_FILL'" class="form-control" name="k_apraisee_comments" [(ngModel)]="kraitem.value.apraisee_comments"></textarea>
+        </td>
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA' && employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="wrappretag vertical_text text-left vertical-middle">
+          <pre *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL' && employeeDetail.assessment_status !='SUBMITTED'">{{kraitem.value.appraiser_remarks}}</pre>
+          <textarea *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='SUBMITTED'" class="form-control" name="k_appraiser_remarks" [(ngModel)]="kraitem.value.appraiser_remarks"></textarea>
+        </td>
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA'" class="vertical_text rating_label text-right vertical-middle">
+          <label *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL'">{{kraitem.value.appraisee_rating}}</label>
+          <select class="form-control" *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='NEED_TO_FILL'"  [(ngModel)]="kraitem.value.appraisee_rating" name="appraiser_rating">
+            <option *ngFor="let r of ratingsArray" [ngValue]="r.rating">{{r.rating}}</option>
+          </select>
+        </td>
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA'" class="vertical_text rating_label text-right vertical-middle">
+          <label>{{(kraitem.value.appraisee_rating *kraitem.value.parameter_weightage)|toPercent}}</label>
+        </td>
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA'  && employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="vertical_text rating_label text-right">
+          <label *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL' && employeeDetail.assessment_status !='SUBMITTED'">{{kraitem.value.appraiser_rating}}</label>
+          <select class="form-control" *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='SUBMITTED'"  [(ngModel)]="kraitem.value.appraiser_rating" name="appraiser_rating">
+            <option *ngFor="let r of ratingsArray" [ngValue]="r.rating">{{r.rating}}</option>
+          </select>
+        </td>
+
+        <td *ngIf="kraitem.value.apraisal_parameter_type == 'KRA'  && employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="vertical_text rating_label text-right vertical-middle">
+          <label>{{(kraitem.value.appraiser_rating *kraitem.value.parameter_weightage)|toPercent}}</label>
+        </td>
+
+      </tr>
+
+      <tr>
+        <td colspan="5" *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="text-center" style="font-size:13px !important;"><strong>PART-2 Knowledge, Skills, Assessment and Values</strong> </td>
+        <td colspan="8" *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="text-center" style="font-size:13px !important;"><strong>PART-2 Knowledge, Skills, Assessment and Values</strong> </td>
+        <td colspan="5" *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" class="text-center" style="font-size:13px !important;"><strong>PART-2 Knowledge, Skills, Assessment and Values</strong> </td>
+      </tr>
+
+      <tr class="params" *ngFor="let generalitem of assessmentDetail | keyValues">
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL'" class="parrameter vertical_text text-left">{{generalitem.value.assessment_parameter}}</td>
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL'" class="parameter_weightage vertical_text rating_label text-right vertical-middle">{{generalitem.value.parameter_weightage}}</td>
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL' " class="wrappretag vertical_text text-left">
+          <pre *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL'">{{generalitem.value.apraisee_comments}}</pre>
+          <textarea *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='NEED_TO_FILL'" class="form-control" name="k_apraisee_comments" [(ngModel)]="generalitem.value.apraisee_comments"></textarea>
+        </td>
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL' && employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="wrappretag vertical_text text-left">
+          <pre *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL' && employeeDetail.assessment_status !='SUBMITTED'">{{generalitem.value.appraiser_remarks}}</pre>
+          <textarea *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='SUBMITTED'" class="form-control" name="k_appraiser_remarks" [(ngModel)]="generalitem.value.appraiser_remarks"></textarea>
+        </td>
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL'" class="vertical_text rating_label text-right vertical-middle">
+          <label *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL'">{{generalitem.value.appraisee_rating}}</label>
+          <select class="form-control" *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='NEED_TO_FILL'"  [(ngModel)]="generalitem.value.appraisee_rating" name="appraiser_rating">
+            <option *ngFor="let r of ratingsArray" [ngValue]="r.rating">{{r.rating}}</option>
+          </select>
+        </td>
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL'" class="vertical_text rating_label text-right vertical-middle">
+          <label>{{(generalitem.value.appraisee_rating *generalitem.value.parameter_weightage)|toPercent}}</label>
+        </td>
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL'  && employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="vertical_text rating_label text-right vertical-middle">
+          <label *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL' && employeeDetail.assessment_status !='SUBMITTED'">{{generalitem.value.appraiser_rating}}</label>
+          <select class="form-control" *ngIf="employeeDetail.assessment_status && employeeDetail.assessment_status =='SUBMITTED'"  [(ngModel)]="generalitem.value.appraiser_rating" name="appraiser_rating">
+            <option *ngFor="let r of ratingsArray" [ngValue]="r.rating">{{r.rating}}</option>
+          </select>
+        </td>
+
+        <td *ngIf="generalitem.value.apraisal_parameter_type == 'GENERAL'  && employeeDetail.assessment_status && employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="vertical_text rating_label text-right vertical-middle">
+          <label>{{(generalitem.value.appraiser_rating *generalitem.value.parameter_weightage)|toPercent}}</label>
+        </td>
+
+      </tr>
+
+      <tr>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" colspan="5"> </td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" colspan="8"> </td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" colspan="5"> </td>
+      </tr>
+      <tr>
+        <td>Total</td>
+        <td class="text-right"><label>{{grandSum()}}</label></td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" ></td>
+        <td class="text-right">Overall Rating</td>
+        <td ></td>
+        <td class="text-right"><label>{{overallAppraiseeAverage() | number : '1.2-2'}}</label></td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="rating_label"></td>
+        <td class="text-right" *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" class="vertical_text rating_label text-right">{{overallAppraiserAverage() | number : '1.2-2'}}</td>
+      </tr>
+      <tr>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL' " colspan="5"> </td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" colspan="8"> </td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" colspan="5"> </td>
+      </tr>
+      <tr class="employee">
+        <td colspan="2" class="vertical_text text-center">Employee Comments</td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" colspan="6"><pre>{{employeeDetail.employee_comment}}</pre></td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" colspan="3"><pre>{{employeeDetail.employee_comment}}</pre></td>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" colspan="3">
+          <textarea *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="form-control" name="employee_comment" [(ngModel)]="employeeDetail.employee_comment"></textarea>
+        </td>
+      </tr>
+      <tr class="employee">
+        <td colspan="2" class="vertical_text text-center">Development Plan</td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" colspan="6"><pre>{{employeeDetail.employee_development_plan}}</pre></td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" colspan="3"><pre>{{employeeDetail.employee_development_plan}}</pre></td>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" colspan="3">
+          <textarea *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="form-control" name="development_plan" [(ngModel)]="employeeDetail.employee_development_plan"></textarea>
+        </td>
+      </tr>
+      <tr class="employee">
+        <td colspan="2" class="vertical_text text-center">Strengths and Improvement Areas</td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id != storedDetail.employee_id )" colspan="6"><pre>{{employeeDetail.employee_improvement_area}}</pre></td>
+        <td *ngIf="employeeDetail.assessment_status !='NEED_TO_FILL' && ( employeeDetail.employee_id == storedDetail.employee_id )" colspan="3"><pre>{{employeeDetail.employee_improvement_area}}</pre></td>
+        <td *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" colspan="3">
+          <textarea *ngIf="employeeDetail.assessment_status =='NEED_TO_FILL'" class="form-control" name="improvement_areas" [(ngModel)]="employeeDetail.employee_improvement_area"></textarea>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-sm-12 text-center">
+    <a [routerLink]="['/summary']" class="btn btn-danger">Back</a>
+    <a *ngIf="employeeDetail.assessment_status && (employeeDetail.assessment_status =='NEED_TO_FILL')" (click)="saveAssessment()" class="btn btn-success text-white">Save</a>
+    <a *ngIf="employeeDetail.assessment_status && (employeeDetail.assessment_status =='NEED_TO_FILL')" (click)="saveAssessment(true)" class="btn btn-primary text-white">Save & Submit</a>
+
+  </div>
+</div>

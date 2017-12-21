@@ -1,0 +1,86 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+  <div  class="col-sm-12" *ngIf="!isLoading">
+    <div class="alert alert-danger success-message" *ngIf="error">
+      {{errorMsg}}.
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="!isLoading">
+      <div class="col-xs-8">
+          <h2 class="text-left">{{heading}}</h2>
+      </div>
+      <div class="col-xs-4 text-right">
+          <h2><a routerLink = "/period" class="font-30" title="Back"><i aria-hidden="true"class="fa fa-arrow-circle-left"></i></a></h2>
+      </div>
+</div>
+<div class="row" *ngIf="!isLoading">
+  <div class="col-xs-12">
+    <fieldset>
+      <form #period_form="ngForm"   name="period_form" class="col-md-6 form-group-md form-horizontal form-small" >
+         <div class="form-group">
+            <label class="col-xs-4 control-label" for="start_date">Start date</label>
+            <div class="col-xs-4">
+              <my-date-picker name="start_date" [options]="myDatePickerOptions"
+                              [(ngModel)]="period_data.start_date" required></my-date-picker>
+            </div>
+          </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label" for="end_date">End date</label>
+          <div class="col-xs-4">
+              <my-date-picker name="end_date" [options]="end_date(period_data)"
+                              [(ngModel)]="period_data.end_date" required></my-date-picker>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label" for="submission_start_date">Submission start date</label>
+          <div class="col-xs-4">
+              <my-date-picker name="submission_start_date" [options]="end_date(period_data)"
+                              [(ngModel)]="period_data.submission_start_date" required></my-date-picker>
+          </div>
+          <!-- <div class="col-xs-2">
+            <select class="form-control width-sm"><option></option></select>
+          </div>
+          <div class="col-xs-2">
+            <select class="form-control width-sm"><option></option></select>
+          </div> -->
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label" for="submission_end_date">Submission End date</label>
+          <div class="col-xs-4">
+              <my-date-picker name="submission_end_date" [options]="submission_end_date_obj(period_data)"
+                              [(ngModel)]="period_data.submission_end_date" required></my-date-picker>
+          </div>
+          <!-- <div class="col-xs-2">
+            <select class="form-control width-sm"><option></option></select>
+          </div>
+          <div class="col-xs-2">
+            <select class="form-control width-sm"><option></option></select>
+          </div> -->
+        </div>
+        <div class="form-group">
+          <label class="col-xs-4 control-label" for="resubmission_end_date">Resubmission End date</label>
+          <div class="col-xs-4">
+              <my-date-picker name="resubmission_end_date" [options]="resubmission_end_date_obj(period_data)"
+                              [(ngModel)]="period_data.resubmission_end_date" required></my-date-picker>
+          </div>
+          <!-- <div class="col-xs-2">
+            <select class="form-control width-sm">
+				<option *ngFor="let i of devices">{{i}}</option>
+			</select>
+          </div> 
+          <div class="col-xs-2">
+            <select class="form-control width-sm"><option></option></select>
+          </div>-->
+        </div>
+        <div class="text-center">
+          <button type="button" (click)="savePeriod(period_data.period_id)" class="btn btn-primary">Submit</button>
+          <!--<button type="reset"  class="btn btn-default">Clear</button>-->
+        </div>
+        <div class="text-center height-15">&nbsp;</div>
+      </form>
+    </fieldset>
+  </div>
+</div>

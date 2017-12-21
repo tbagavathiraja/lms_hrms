@@ -1,0 +1,9 @@
+<app-header *ngIf="showIncludes"></app-header>
+<div id="content">
+    <div class="outer">
+        <div class="inner bg-light lter">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+  </div>
+<app-footer *ngIf="showIncludes"></app-footer>

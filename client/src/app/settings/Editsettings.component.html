@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+    <img src="assets/img/loading-large.gif"/>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+
+    <div class="row">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h2>{{screen_name}}Settings</h2></div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+        <h2><a class="font-30" [routerLink]="['/settings']" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="!isLoading">
+    <form class="form-horizontal form-small" name="formsettings" id="formsettings">
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="Remainder">Remainder Days:</label>
+        <div class="col-sm-4">
+        <input type= "text"   [(ngModel)]="editSettingsdetail.remainder_days" OnlyNumber="true" class="form-control" [ngModelOptions]="{standalone: true}">
+        </div>
+        </div>
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="Compoff">Compoff Expiry Date</label>
+        <div class="col-sm-4">
+        <input type="text"   [(ngModel)]="editSettingsdetail.compoff_expiry" OnlyNumber="true" class="form-control" [ngModelOptions]="{standalone: true}">
+        </div>
+        </div>
+
+      <div class="form-group">
+        <div class="col-sm-11">
+          <button type="button" class="btn btn-primary" (click)="edit_Detail()">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

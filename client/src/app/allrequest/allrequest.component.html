@@ -1,0 +1,187 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+    <div class="alert alert-success" *ngIf="success">
+     {{success_message}}.
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+    <div class="alert alert-danger" *ngIf="error_status">
+      {{errMessage}}.
+    </div>
+  </div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+		<div class="row">
+			<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7"><h2>All Request</h2></div>
+			<div class="col-xs-8 col-sm-4 col-md-4 col-lg-4 text-right margin-top-20px">
+				<input type="text" formControlname="search" (keyup.enter)="getAllRequest()" placeholder="Search" class="form-control" [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+			</div>
+			<div class="col-xs-4 col-sm-1 col-md-1 col-lg-1 text-right margin-top-20px padding-left-0px">
+				<button type="button" (click)="getAllRequest()" class="btn btn-info btn-padding">
+					<span class="glyphicon glyphicon-search hidden-xs"></span> Search
+				</button>
+				<h2 class="visible-xs"></h2>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="itemCount != 0 && !isLoading">
+
+    <data-table id="all-request-grid" #allRequestGrid headerTitle="" [indexColumn]="false" [items]="items" [substituteRows]="false" [limit]="15" [itemCount]="itemCount" (reload)="reloadItems($event)">
+
+      <data-table-column [property]="'project'" [header]="'Project Name'" width="25%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-left">
+            {{item.project | capitalise}}
+          </div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'no_of_resource'" [header]="'No of Resource'" width="20%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-right">
+            {{item.no_of_resource}}
+          </div>
+        </ng-template>
+      </data-table-column>
+
+      <data-table-column [property]="'request_status'" [header]="'Status'" width="10%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+        	<div class="text-left">
+          		<label class="label" [ngClass]="{'label-success': item.request_status==='APPROVED','label-danger':item.request_status==='REJECTED','label-info':item.request_status==='PARTIAL APPROVAL','label-default':item.request_status==='RELEASED'||item.request_status==='RAISED'}">{{item.request_status | capitalise}}</label>
+          	</div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'request_date'" [header]="'Request Date'" width="15%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-right">
+            {{item.request_date}}
+          </div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'Action'" [header]="'Action'" width="10%" [resizable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-center">
+            <a (click)="showRequestInfo(item.resource_request_id,requestInfoModal)" title="Request Information"><i class="fa fa-info-circle fa-lg" aria-hidden="true"></i></a>
+            <span *ngIf="item.request_status !== 'APPROVED' && item.request_status !== 'REJECTED'&& item.request_status !== 'RELEASED'">
+
+               | <a (click)="onApprove(item.resource_request_id,approveModal)" title="Approve Request"><i class="fa fa-check-square-o fa-lg" title="All Approve Reject" aria-hidden="true"></i></a> |
+              <a routerLink="/all-request/approve/{{item.resource_request_id}}" title="Request Details"><i class="fa fa-list fa-lg"></i></a>
+            </span>
+          </div>
+        </ng-template>
+      </data-table-column>
+    </data-table>
+	</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="itemCount ==0 && !isLoading">
+    <div class="well">
+      <p class="text-center">No Requests Found</p>
+    </div>
+  </div>
+</div>
+<modal #approveModal>
+  <modal-header>
+    <h1>Request Confirmation</h1>
+  </modal-header>
+  <modal-content>
+    <table class="table table-striped table-inverse break-word">
+      <thead>
+      <tr>
+        <th class="column-header">Employee Name</th>
+        <th class="column-header">Comments</th>
+        <th class="column-header">Request Start Date</th>
+        <th class="column-header">Request End Date</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <tr *ngFor="let item of requestInfo">
+        <td class="text-left">{{item.employee_name |capitalise}}</td>
+        <td class="text-left">{{item.comments | capitalise}}</td>
+        <td class="text-right">{{item.request_start_date}}</td>
+        <td class="text-right">{{item.request_end_date}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-success" (click)="handle_request('APPROVED',approveModal,allRequestGrid)">Approve</button>
+    <button class="btn btn-danger" (click)="handle_request('REJECTED',approveModal,allRequestGrid)">Reject</button>
+  </modal-footer>
+</modal>
+
+<modal #requestInfoModal>
+  <modal-header>
+    <h3>Request Information</h3>
+  </modal-header>
+  <modal-content>
+    <div class="row" *ngFor="let project of requestSummary['project_info']">
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-xs-4"><strong>Project Name</strong></div>
+          <div class="col-xs-8">: {{project.project_name}}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4"><strong>Status </strong></div>
+          <div class="col-xs-8">: {{project.request_status | capitalise}}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4"><strong>Total Resource </strong></div>
+          <div class="col-xs-8">: {{project.no_of_resource}}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4"><strong>Comments</strong></div>
+          <div class="col-xs-8 break-word-div">:&nbsp;{{project.comments}}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4"><strong>Requested On</strong></div>
+          <div class="col-xs-8">: {{project.request_date}}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-4"><strong>Request By</strong></div>
+          <div class="col-xs-8">: {{project.request_employee_name | capitalise}}</div>
+        </div>
+        <div class="row" *ngIf="project.request_status == 'APPROVED' || project.request_status == 'REJECTED'">
+          <div class="col-xs-4"><strong>{{project.request_status | capitalise}} By</strong></div>
+          <div class="col-xs-8">: {{project.approver_employee_name | capitalise}}</div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="table table-striped table-inverse break-word">
+          <thead>
+          <tr>
+            <th class="column-header">Employee Name</th>
+            <th class="column-header">Comments</th>
+            <th class="column-header">Start Date</th>
+            <th class="column-header">End Date</th>
+            <th class="column-header">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr *ngFor="let item of requestSummary['request_info'] ">
+            <td class="text-left">{{item.employee_name |capitalise}}</td>
+            <td class="text-left">{{item.comments | capitalise}}</td>
+            <td class="text-right">{{item.request_start_date }}</td>
+            <td class="text-right">{{item.request_end_date }}</td>
+            <td class="text-left">
+              <label class="label" *ngIf = "requestSummary['project_info'][0].request_status != 'RAISED'" [ngClass]="{'label-success': item.status==='APPROVED','label-danger':item.status==='REJECTED','label-info':item.status==='HOLD','label-released':item.status==='RELEASED'}">{{item.status | capitalise}}</label>
+              <label class="label label-default" *ngIf = "requestSummary['project_info'][0].request_status === 'RAISED'">Pending</label>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-default" (click)="requestInfoModal.close()">Close</button>
+  </modal-footer>
+</modal>
+

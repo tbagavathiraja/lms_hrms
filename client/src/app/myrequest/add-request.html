@@ -1,0 +1,82 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+    <div class="alert alert-danger" *ngIf="error_status">
+      {{errMessage}}.
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+
+    <div class="row">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h3>{{screen_name | capitalise}} Request</h3></div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+        <h2><a class="font-30" routerLink="/my-request" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="!isLoading">
+    <form class="form-horizontal form-small" name="formParameter" id="formParameter">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="project_name">Project:</label>
+        <div class="col-sm-6">
+          <select class="form-control" [(ngModel)]="requestModel.project_id" name="project_id">
+            <option value ="" disabled [selected]="requestModel.project_id == ''">Select Project</option>
+            <option *ngFor="let c of project_list" [ngValue]="c.project_id">{{c.project_name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="comments">Comments:</label>
+        <div class="col-sm-6">
+          <input type="text" placeholder="Enter comments" class="form-control" [(ngModel)]="requestModel.comments" name="comments">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="resource">Resource :</label>
+        <div class="col-sm-8 col-xs-12 table-responsive">
+          <table class="table table-stripped">
+            <tr>
+              <th style="width:25% ;">Employee Name</th>
+              <th style="width:25% ;">Comments</th>
+              <th style="width:20% ;">Start Date</th>
+              <th style="width:20% ;">End Date</th>
+              <th style="width:10% ;">Action</th>
+            </tr>
+            <tr *ngFor="let r of resource_request_list; let i = index" [attr.data-index]="i" >
+              <td>
+                <select class="form-control" [(ngModel)]="resource_request_list[i].employee_id" (ngModelChange)="hideEmployee()" [ngModelOptions]="{standalone: true}" >
+                  <option value ="" disabled selected>Select</option>
+                  <option *ngFor="let c of employee_list" [hidden]="c.is_selected ==1 " [ngValue]="c.employee_id">{{c.employee_name}}</option>
+                </select></td>
+              <td><input type="text" placeholder="Enter comments" class="form-control" [(ngModel)]="resource_request_list[i].comments"  [ngModelOptions]="{standalone: true}"></td>
+              <td>
+                <my-date-picker placeholder="Enter Start Date" [options]="myDatePickerOptions" [(ngModel)]="resource_request_list[i].request_start_date" [ngModelOptions]="{standalone: true}" required></my-date-picker>
+              </td>
+              <td>
+                <my-date-picker placeholder="Enter End Date" [options]="toDatePickerOption(i)" [(ngModel)]="resource_request_list[i].request_end_date" [ngModelOptions]="{standalone: true}" required></my-date-picker>
+              <td class="vertical-align-middle"><a *ngIf="resource_request_list.length>1" (click)="removeResource(i)"><i class="fa fa-times"></i></a></td>
+            </tr>
+          </table>
+          <div class="col-sm-12"><a class="pull-right" (click)="addResource()" title="Add Resource"><i class="fa fa-plus-circle fa-2x"></i></a></div>
+        </div>
+
+      </div>
+
+
+
+      <div class="form-group">
+        <div class="col-sm-11">
+          <button *ngIf="screen_name == 'add'" type="button" class="btn btn-primary" (click)="save_request()">Save</button>
+          <button *ngIf="screen_name == 'edit'" type="button" class="btn btn-primary" (click)="updateRequest()">Update</button>
+          <button *ngIf="screen_name == 'clone'" type="button" class="btn btn-primary" (click)="save_request()">Clone</button>
+          <a routerLink="/my-request" class="btn btn-danger" >Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+

@@ -1,0 +1,61 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+		<div class="alert alert-danger" *ngIf="error_status">
+		  {{errMessage}}.
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+		
+		<div class="row">
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h2>{{screen_name}} Holiday</h2></div>
+			 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+				<h2><a class="font-30" [routerLink]="['/admin-holiday']" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+			</div>
+		</div>
+		
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="!isLoading">
+		<form class="form-horizontal form-small" name="formleaverequest" id="formleaverequest">
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="leave_type">Holiday Name:</label>
+			    <div class="col-sm-4">
+                   	<input type= "text" [(ngModel)]="saveDetail.holiday_name" maxlength="30" placeholder="HOLIDAY" class="form-control" name="holiday_name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="reason">Holiday Date:</label>
+			    <div class="col-sm-4">
+			    	<my-date-picker name="from_date" [options]="toDatePickerOptions1" [ngModelOptions]="{standalone: true}" 
+			    	placeholder="DD-MM-YYYY" [(ngModel)]="saveDetail.holiday_date"></my-date-picker>
+			    </div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_type">Location:</label>
+			    <div class="col-sm-4">
+			    	 <select name="location" class="form-control" [(ngModel)]="saveDetail.location_id">
+                		<option value = "" disabled [selected]="saveDetail.location_id == ''">Select Location</option>
+                		<option *ngFor="let location of locations"  [value]="location.location_id">{{location.location_name}}</option>
+              		</select>
+			    </div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_type">Department:</label>
+			    <div class="col-sm-4"> 
+			    	<select name="department" class="form-control" [(ngModel)]="saveDetail.department_id">
+                		<option value = "" disabled [selected]="saveDetail.department_id == ''">Select Department</option>
+                		<option *ngFor="let department of departments"  [value]="department.department_id">{{department.department_name}}</option>
+              		</select>
+			    </div>
+			</div>
+			<div class="form-group"> 
+				<div class="col-sm-11">
+			    	<button type="button" class="btn btn-primary" (click)="save_holiday()">Submit</button>
+			    </div>
+			</div>
+		</form>
+	</div>
+	
+</div>

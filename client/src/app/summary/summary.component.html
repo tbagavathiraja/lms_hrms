@@ -1,0 +1,70 @@
+<div class="container text-center" *ngIf="error?.message">
+  <div class="text-error large-font"><p class="message-margin">Oops.</p><p *ngIf="error?.status !='failure'">{{error.status}}</p><p>{{error.message}}</p></div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+	<img src="assets/img/loading-large.gif" />
+</div>
+<p  *ngIf="!isLoading">
+  <tabset >
+    <tab title="My Assessment">
+      <table class="table table-striped table-inverse" *ngIf="selfSummary.length>0">
+        <thead>
+        <tr>
+          <th>Period</th>
+          <th>status</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr *ngFor="let item of selfSummary " >
+          <td class="text-left">{{item?.start_date |dateFormatPipe}} <span *ngIf="item?.end_date">to</span> {{item?.end_date |dateFormatPipe}}</td>
+          <td class="text-left">{{item?.assessment_status |skipUnderScore}}</td>
+          <td class="text-left">
+            <a [routerLink]="['/assessment/'+item?.employee_assessment_id]" *ngIf="item.assessment_status !='NEED_TO_FILL'" (click)="setRole(item)">View Assessment</a>
+            <a [routerLink]="['/assessment/'+item?.employee_assessment_id]" *ngIf="item.assessment_status =='NEED_TO_FILL'" (click)="setRole(item)">Fill Assessment</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+        <div class="well" *ngIf="selfSummary.length == 0 && !isLoading">
+          <p class="text-center">No Assessments Found</p>
+        </div>
+    </tab>
+    <tab title="Employee Assessment" *ngIf="itemCount > 0">
+      
+      <data-table id="review-grid" headerTitle=""[indexColumn]="false" [items]="items" [substituteRows]="false" [limit]="15" [itemCount]="itemCount" (reload)="reloadItems($event)">
+
+        <data-table-column [property]="'project'" [header]="'Employee Name'" width="25%" [sortable]="true">
+          <ng-template #dataTableCell let-item="item">
+            <div class="text-left">
+              {{item?.employee_name |capitalise}}
+            </div>
+          </ng-template>
+        </data-table-column>
+        <data-table-column [property]="'no_of_resource'" [header]="'Period'" width="15%" [sortable]="true">
+          <ng-template #dataTableCell let-item="item">
+            <div class="text-right">
+              {{item?.start_date |dateFormatPipe}} to {{item?.end_date |dateFormatPipe}}
+            </div>
+          </ng-template>
+        </data-table-column>
+        <data-table-column [property]="'request_status'" [header]="'Status'" width="15%" [sortable]="true">
+          <ng-template #dataTableCell let-item="item">
+            <div class="text-left">
+            {{item?.assessment_status |skipUnderScore}}
+            </div>
+          </ng-template>
+        </data-table-column>
+        <data-table-column [property]="'Action'" [header]="'Action'" width="10%" [resizable]="true">
+          <ng-template #dataTableCell let-item="item">
+            <div class="text-center">
+              <a class="router" *ngIf="item.assessment_status && item.assessment_status !='NEED_TO_FILL'" (click)="setRole(item)" [routerLink]="['/assessment/'+item?.employee_assessment_id]" [class.disabled]="item.assessment_status && item.assessment_status =='NEED_TO_FILL'" (click)="setRole(item)" ><span >Review Assessment</span></a>
+              <a class="router" *ngIf="item.assessment_status && item.assessment_status =='NEED_TO_FILL'" [class.disabled]="item.assessment_status && item.assessment_status =='NEED_TO_FILL'" (click)="setRole(item)" ><span >Review Assessment</span></a>
+            </div>
+          </ng-template>
+        </data-table-column>
+      </data-table>
+    </tab>
+  </tabset>
+</p>

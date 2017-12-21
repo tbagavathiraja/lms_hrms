@@ -1,0 +1,65 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+		<div class="alert alert-danger" *ngIf="error_status">
+		  {{errMessage}}.
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+
+		<div class="row">
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h2>{{screen_name}} Leave Request</h2></div>
+			 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+				<h2><a class="font-30" [routerLink]="['/leave-request']" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="!isLoading">
+		<form class="form-horizontal form-small" name="formleaverequest" id="formleaverequest">
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="leave_type">Leave type:</label>
+			    <div class="col-sm-4">
+                   	<select name="leave_type" class="form-control" [(ngModel)]="saveDetail.leave_type" (ngModelChange)="onChange($event)"  [ngModelOptions]="{standalone: true}">
+            			<option value = "" disabled>Select Leave Type</option>
+              			<option *ngFor="let l_type of types"  [value]="l_type">{{l_type}}</option>
+            		</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="reason">Reason:</label>
+			    <div class="col-sm-4">
+			    	<textarea class="form-control" name="reason" rows="2" placeholder="Reason" [(ngModel)]="saveDetail.reason" [ngModelOptions]="{standalone: true}"></textarea>
+			    </div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_type">From Date:</label>
+			    <div class="col-sm-4">
+			    	<my-date-picker name="from_date" [options]="datePickerOptions"
+                            [ngModelOptions]="{standalone: true}" [options]="disabledate()" placeholder="Enter From Date" [(ngModel)]="saveDetail.from_date"></my-date-picker>
+			    </div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_type">To Date:</label>
+			    <div class="col-sm-4">
+			    	<my-date-picker name="to_date" [options]="get_date()" [ngModelOptions]="{standalone: true}"
+			    		placeholder="Enter To Date" [(ngModel)]="saveDetail.to_date" required></my-date-picker>
+			    </div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_type">Number of days:</label>
+			    <div class="col-sm-4">
+			    	<input type="text"  OnlyNumber="true" placeholder="Number Of Days" [(ngModel)]="saveDetail.number_of_days" class="form-control" [ngModelOptions]="{standalone: true}">
+			    </div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-11">
+			    	<button type="button" class="btn btn-primary" (click)="save_leave()">Submit</button>
+			    </div>
+			</div>
+		</form>
+	</div>
+
+</div>

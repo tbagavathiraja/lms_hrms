@@ -1,0 +1,63 @@
+
+
+<div class="container text-center" *ngIf="error?.message">
+  <div class="text-error large-font"><p class="message-margin">Oops.</p><p *ngIf="error?.status !='failure'">{{error.status}}</p><p>{{error.message}}</p></div>
+</div>
+<div class="form card" *ngIf="logindata?.authentication_type =='DATABASE'">
+  <div class="header">
+    <h2>Employee Portal</h2>
+  </div>
+  <div class="login">
+    <label style="display: block;   padding:10px;text-align: center;   line-height: 150%; font-size: 20px;">
+      <strong>Sign in using</strong>
+    </label>
+    <div class="row">
+  		<div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 login-error" *ngIf="errMessage !=''">
+    		<div class="alert alert-danger">
+      			{{errMessage}}.
+    		</div>
+  		</div>
+    	<div class="col-lg-12 col-md-12 col-mx-12 col-xs-12">
+    		<div class="panel-body" style="padding-top: 0px;">
+		      <form role="form" id="signupForm" (keydown.enter)="login()">
+		        <br>
+		        <div class="form-group input-group">
+		          <span class="input-group-addon" style="font-size:17px"><i class="fa fa-user"></i></span>
+		          <input type="text" id="employee_email" class="form-control ui-widget-content" placeholder="Your Email Address"
+		                 maxlength="100" [(ngModel)]="credential.employee_email" [ngModelOptions]="{standalone: true}">
+		        </div>
+		        <div class="form-group input-group">
+		          <span class="input-group-addon" style="font-size:20px"><i class="fa fa-lock"></i></span>
+		          <input type="password" id="password" class="form-control ui-widget-content" placeholder="Your Password"
+		                 maxlength="20" [(ngModel)]="credential.password" [ngModelOptions]="{standalone: true}">
+		        </div>
+		        <button class="btn btn-primary form-control" style="width: 160px;float: left" type="button" id="login_submit" (click)="login()">Login</button>
+
+            <button class="btn btn-primary form-control" style="width: 160px;float: right" type="button" id="forgot_password" (click)="forgotPassword()">forgot password</button>
+
+		          <!--  <p ng-if="errMessage" class="text-error error-message" style="padding-top: 10px;margin-bottom: 0px;" *ngIf="errMessage !=''">
+		          {{errMessage}}</p>-->
+		      </form>
+		    </div>
+    	</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container" *ngIf="logindata && logindata?.authentication_type && logindata?.authentication_type !='DATABASE'">
+  <div class="form card">
+    <div class="header">
+      <h2>Employee Portal</h2></div>
+    <div class="login">
+      <label style="display: block;   padding:10px;text-align: center;   line-height: 150%; font-size: 20px;"><strong>Sign in using</strong></label>
+      <div class="user-image"><a><img border="0" alt="Sign in with Google" src="../../assets/resource/images/Google_G_Logo.png" width="100" height="100" (click)="signIn('google')"></a></div><a (click)="signIn('google')" style="display: block;text-align: center;   line-height: 150%; font-size: 14px;">Sign in With Google</a>
+
+<!--for php-->
+      <!--<div class="user-image"><a href={{logindata.data?.authurl}}><img border="0" alt="Sign in with Google" src="../../assets/resource/images/Google_G_Logo.png" width="100" height="100"></a></div><a href={{logindata.data?.authurl}} style="display: block;text-align: center;   line-height: 150%; font-size: 14px;">Sign in With Google</a>-->
+      <p class="text-error error-message" *ngIf="errMessage !=''" style="padding-top: 10px;margin-bottom: 0px;"></p>
+    </div>
+  </div>
+
+</div>
+

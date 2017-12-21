@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+		<div class="row">
+			<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7"><h2>All Project</h2></div>
+			<div class="col-xs-8 col-sm-4 col-md-4 col-lg-4 text-right margin-top-20px">
+				<input type="text" formControlname="search" (keyup.enter)="getAllProjects()" placeholder="Search" class="form-control" [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+			</div>
+			<div class="col-xs-4 col-sm-1 col-md-1 col-lg-1 text-right margin-top-20px padding-left-0px">
+				<button type="button" (click)="getAllProjects()" class="btn btn-info btn-padding">
+					<span class="glyphicon glyphicon-search hidden-xs"></span> Search
+				</button>
+				<h2 class="visible-xs"></h2>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="itemCount != 0 && !isLoading">
+
+    <data-table id="all-request-grid" #allRequestGrid headerTitle="" [indexColumn]="false" [items]="items" [substituteRows]="false" [limit]="15" [itemCount]="itemCount" (reload)="reloadItems($event)">
+
+      <data-table-column [property]="'project'" [header]="'Project Name'" width="20%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-left">
+            {{item.project_name | capitalise}}
+          </div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'project_members'" [header]="'Resource'" width="80%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-left">
+            {{item.project_members}}
+          </div>
+        </ng-template>
+      </data-table-column>
+    </data-table>
+	</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="itemCount ==0 && !isLoading">
+    <div class="well">
+      <p class="text-center">No Projects Found</p>
+    </div>
+  </div>
+</div>

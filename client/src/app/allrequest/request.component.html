@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message">
+    <div class="alert alert-danger" *ngIf="error_status">
+      {{errMessage}}.
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <div class="row">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h3>{{screen_name | capitalise}} Request</h3></div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+        <h2><a class="font-30" routerLink="/all-request" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+    <form class="form-horizontal form-small" name="formParameter" id="formParameter">
+      <div class="form-group">
+        <div class="col-xs-4 text-right" for="project_name"><strong>Project:</strong></div>
+        <div class="col-xs-6 text-left">
+          {{requestModel.project_name | capitalise }}
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-4 text-right" for="comments"><strong>Comments:</strong></div>
+        <div class="col-xs-8 text-left break-word-div">
+          {{ requestModel.comments }}
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-4 text-right" for="comments"><strong>Requested On:</strong></div>
+        <div class="col-xs-8 text-left">
+          {{ requestModel.request_date }}
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-4 text-right" for="comments"><strong>Requested By:</strong></div>
+        <div class="col-xs-8 text-left">
+          {{ requestModel.request_employee_name | capitalise }}
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-4 text-right" for="comments"><strong>Status:</strong></div>
+        <div class="col-xs-8 text-left">
+          <label class="label" [ngClass]="{'label-success': requestModel.request_status==='APPROVED','label-danger':requestModel.request_status==='REJECTED','label-info':requestModel.request_status==='PARTIAL_APPROVAL','label-default':requestModel.request_status==='RELEASED'||requestModel.request_status==='RAISED'}">{{requestModel.request_status | capitalise}}</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-xs-4 col-sm-4" for="resource">Resource :</label>
+        <div class="col-xs-12 col-sm-8 table-responsive">
+          <table class="table table-stripped">
+            <tr>
+              <th style="width: 20%">Emplyee Name</th>
+              <th style="width: 25%">Comments</th>
+              <th style="width: 20%">Start Date</th>
+              <th style="width: 20%">End Date</th>
+              <th style="width: 15%">Action</th>
+            </tr>
+            <tr *ngFor="let r of resource_request_list; let i = index" [attr.data-index]="i" >
+              <td>
+                <select [disabled]="r.is_editable==0"  class="form-control" [(ngModel)]="resource_request_list[i].employee_id" (ngModelChange)="hideEmployee()" [ngModelOptions]="{standalone: true}">
+                  <option *ngFor="let c of employee_list"  [hidden]="c.is_selected ==1"  [ngValue]="c.employee_id">{{c.employee_name}}</option>
+                </select></td>
+              <td><input [disabled]="r.is_editable==0" type="text" class="form-control" [(ngModel)]="resource_request_list[i].comments"  [ngModelOptions]="{standalone: true}"></td>
+              <td>
+                <my-date-picker [disabled]="r.is_editable==0" [options]="myDatePickerOptions" [(ngModel)]="resource_request_list[i].request_start_date" [ngModelOptions]="{standalone: true}" required></my-date-picker></td>
+              <td>
+                <my-date-picker [disabled]="r.is_editable==0" [options]="toDatePickerOption(i)" [(ngModel)]="resource_request_list[i].request_end_date" [ngModelOptions]="{standalone: true}" required></my-date-picker>
+              <td>
+                <select [disabled]="r.is_editable==0" class="form-control" [(ngModel)]="resource_request_list[i].status"  [ngModelOptions]="{standalone: true}">
+                  <option value="RAISED" disabled selected>Select</option>
+                <option *ngFor="let d of approvalStatus" [ngValue]="d">{{d | capitalise}}</option>
+              </select>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+
+
+
+      <div class="form-group">
+        <div class="col-xs-11">
+          <button type="button" class="btn btn-primary" (click)="modifyRequest()">Update</button>
+          <a routerLink="/all-request" class="btn btn-danger" >Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+

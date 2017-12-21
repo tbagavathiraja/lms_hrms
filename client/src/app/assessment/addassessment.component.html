@@ -1,0 +1,51 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+		<div class="alert alert-danger" *ngIf="error_status">
+		  {{errMessage}}.
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+		<div class="row">
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h2>Add Assessment</h2></div>
+			 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+				<h2><a class="font-30" [routerLink]="['/list-assessment']" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="!isLoading">
+		<form class="form-horizontal form-small" name="formParameter" id="formParameter">
+			<div class="form-group">
+				<label class="control-label col-sm-2 col-xs-4" for="assessment_period">Assessment Period:</label>
+			    <div class="col-sm-4  col-xs-8">
+			    	<select [(ngModel)]="addAssessment.selectedValue" (change)="getAssessmentEmployee()" class="form-control" name="assessment_period" id="assessment_period">
+						<option value ="" disabled [selected]="addAssessment.selectedValue == ''">Select Period</option>
+						<option *ngFor="let ap of assessment_period" [ngValue]="ap.period_id">{{ap.period}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group" *ngIf="isEmployee">
+				<label class="control-label col-sm-2">Employees:</label>
+			    <div class="col-xs-10">
+			    	<div class="row">
+			    		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 text-left">
+			    			<label><input type="checkbox" name="employee" [checked]="isSelectedAll" (click)="selectAll()" />&nbsp;&nbsp;Select All</label>
+			    		</div>
+			    	</div>
+			    	<div class="row">
+			    		<div class="col-lg-3 col-md-2 col-sm-2 col-xs-12 text-left" *ngFor="let item of employeeList">
+			    			<label><input type="checkbox" name="employee" [checked]="isChecked(item.employee_id)" (click)="addEmployee(item.employee_id)" />&nbsp;&nbsp;{{item.employee_name}}</label>
+			    		</div>
+			    	</div>
+				</div>
+			</div>
+			<div class="form-group"> 
+				<div class="col-sm-12 text-right">
+			    	<button type="button" class="btn btn-primary" (click)="save_assessment()">Submit</button>
+			    </div>
+			</div>
+	    </form>
+	</div>
+</div>

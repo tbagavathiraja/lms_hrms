@@ -1,0 +1,51 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+		<div class="alert alert-danger" *ngIf="error_status">
+		  {{errMessage}}.
+		</div>
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+		
+		<div class="row">
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h2>{{screen_name}} Assessment Parameter</h2></div>
+			 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+				<h2><a class="font-30" [routerLink]="['/assessment-parameter']" title="Back"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></a></h2>
+			</div>
+		</div>
+		
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" *ngIf="!isLoading">
+		<form class="form-horizontal form-small" name="formParameter" id="formParameter">
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_name">Parameter Name:</label>
+			    <div class="col-sm-4">
+			    	<input type="text" class="form-control" name="parameter_name" maxlength="20" id="parameter_name" [(ngModel)]="parameterModel.parameter_name"  placeholder="Parameter name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_weightage">Parameter Weightage:</label>
+			    <div class="col-sm-4"> 
+			    	<input type="text" min="1" OnlyNumber="true" class="form-control" id="parameter_weightage" maxlength="2" name="parameter_weightage" [(ngModel)]="parameterModel.default_parameter_weightage" placeholder="Parameter Weightage">
+			    </div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="parameter_type">Parameter Type:</label>
+			    <div class="col-sm-4"> 
+			    	<select class="form-control" name="apraisal_parameter_type" id="apraisal_parameter_type" (change)="onChange($event.target.value)">
+			    		<option [ngValue]="KRA" [selected]="parameterModel.apraisal_parameter_type == 'KRA'">KRA</option>
+			    		<option [ngValue]="GENERAL" [selected]="parameterModel.apraisal_parameter_type == 'GENERAL'">GENERAL</option>
+			    	</select>
+			    </div>
+			</div>
+			<div class="form-group"> 
+				<div class="col-sm-11">
+			    	<button type="button" class="btn btn-primary" (click)="save_parameter()">Submit</button>
+			    </div>
+			</div>
+		</form>
+	</div>
+	
+</div>

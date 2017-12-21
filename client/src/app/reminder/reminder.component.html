@@ -1,0 +1,91 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+		<img src="assets/img/loading-large.gif" />
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+      <div class="alert alert-success" *ngIf="success">
+        <strong>Success!</strong> {{success_message}}.
+      </div>
+    </div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7"><h2>My Reminders</h2></div>
+			<div class="col-xs-8 col-sm-4 col-md-4 col-lg-4 text-right margin-top-20px">
+				<input type="text" formControlname="search" (keyup.enter)="getReminderSummary()" placeholder="Search" class="form-control" [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+			</div>
+			<div class="col-xs-4 col-sm-1 col-md-1 col-lg-1 text-right margin-top-20px padding-left-0px">
+				<button type="button" (click)="getReminderSummary()" class="btn btn-info btn-padding">
+					<span class="glyphicon glyphicon-search hidden-xs"></span> Search
+				</button>
+				<h2 class="visible-xs"></h2>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-responsive"  *ngIf="itemCount  > 0 && !isLoading">
+
+    <data-table id="reminder-grid" headerTitle=""[indexColumn]="false" [items]="items" [substituteRows]="false" [limit]="15" [itemCount]="itemCount" (reload)="reloadItems($event)">
+
+      <data-table-column [property]="'project_name'" [header]="'Project Name'" width="25%" [sortable]="true">\
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-left">
+            {{item.project_name | capitalise}}
+          </div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'employee_name'" [header]="'Employee Name'" width="10%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-left">
+            {{item.employee_name | capitalise}}
+          </div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'duration'" [header]="'Request Expires in'" width="10%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-right">
+            {{item.duration }}
+          </div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'start_date'" [header]="'Request Start Date'" width="10%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-right">
+            {{item.start_date }}
+          </div>
+        </ng-template>
+      </data-table-column>
+      <data-table-column [property]="'end_date'" [header]="'Request End Date'" width="10%" [sortable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-right">
+            {{item.end_date }}
+          </div>
+        </ng-template>
+      </data-table-column>
+
+      <data-table-column [property]="'Action'" [header]="'Action'" width="10%" [resizable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <button class="btn btn-danger" (click)="releaseResource(releaseModal,item.resource_request_employee_id)">Release</button>
+        </ng-template>
+      </data-table-column>
+    </data-table>
+	</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="itemCount ==0 && !isLoading">
+    <div class="well">
+      <p class="text-center">No Reminders Found</p>
+    </div>
+  </div>
+</div>
+
+<modal #releaseModal>
+  <modal-header>
+    <h3>Release Confirmation</h3>
+  </modal-header>
+  <modal-content>
+    <p>Are you sure do you want to release the resource ? </p>
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-success" (click)="confirmRelease(releaseModal)">Release</button>
+    <button class="btn btn-close" (click)="releaseModal.close()">Close</button>
+  </modal-footer>
+</modal>
+

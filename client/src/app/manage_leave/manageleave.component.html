@@ -1,0 +1,113 @@
+
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 loading-icon" *ngIf="isLoading">
+    <img src="assets/img/loading-large.gif" />
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 success-message" *ngIf="!isLoading">
+    <div class="alert alert-success" *ngIf="success">
+      {{success_message}}.
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading">
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6"><h2>Leave Request</h2></div>
+      <div class="col-xs-8 col-sm-4 col-md-4 col-lg-4 text-right margin-top-20px">
+        <input type="text" formControlname="search" (keyup.enter)="getAllleave()" placeholder="Search" class="form-control" [(ngModel)]="search" [ngModelOptions]="{standalone: true}">
+      </div>
+      <div class="col-xs-4 col-sm-1 col-md-1 col-lg-1 text-right margin-top-20px">
+        <button type="button" (click)="getAllleave()" class="btn btn-info btn-padding">
+          <span class="glyphicon glyphicon-search hidden-xs"></span> Search
+        </button>
+        <h2 class="visible-xs"></h2>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-responsive" *ngIf="!isLoading && itemCount > 0">
+    <data-table id="Manage-Leave" headerTitle=""  *ngIf="itemCount>0" [indexColumn]="false" [items]="items" [substituteRows]="false" [limit]="15" [itemCount]="itemCount" (reload)="reloadItems($event)">
+      <data-table-column [property]="'employee_name'" [header]="'Employee Name'" width="10%" [sortable]="true"></data-table-column>
+      <data-table-column [property]="'reason'" [header]="'Reason'" width="10%" [sortable]="true"></data-table-column>
+      <data-table-column [property]="'leave_type'" [header]="'Leave Type'" width="10%" [sortable]="true"></data-table-column>
+      <data-table-column [property]="'from_date'" [header]="'From'" width="8%" [sortable]="true">
+        <template #dataTableCell let-item="item">
+          <div  class="text-right">{{item.from_date | date}}</div>
+        </template>
+      </data-table-column>
+      <data-table-column [property]="'to_date'" [header]="'To'" width="8%" [sortable]="true">
+        <template #dataTableCell let-item="item">
+          <div  class="text-right">{{item.to_date | date}}</div>
+        </template>
+      </data-table-column>
+      <data-table-column [property]="'number_of_days'" [header]="'Number of Days'" width="10%" [sortable]="true">
+        <template #dataTableCell let-item="item">
+          <div  class="text-right">{{item.number_of_days}}</div>
+        </template>
+      </data-table-column>
+      <data-table-column [property]="'Action'" [header]="'Action'" width="12%" [resizable]="true">
+        <ng-template #dataTableCell let-item="item">
+          <div class="text-center" *ngIf="item.status =='Initial'">
+            <button type="button" class="btn btn-success"  (click)="accept(item,acceptModal)">Accept</button> <button type="button"  class="btn btn-danger"  (click)="reject(item,rejectModal)">Reject</button>
+          </div>
+          <div class="text-center" *ngIf="item.status =='Granted'">
+            <label class="label" [ngClass]="{'label-success': item.status==='Granted'}">{{item.status}}</label>
+          </div>
+          <div class="text-center" *ngIf="item.status =='Rejected'">
+            <label class="label" [ngClass]="{'label-danger': item.status==='Rejected'}">{{item.status}}</label>
+          </div>
+        </ng-template>
+      </data-table-column>
+    </data-table>
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="!isLoading && itemCount ==0">
+    <div class="well">
+      <p class="text-center">No Leave Request Found</p>
+    </div>
+  </div>
+</div>
+
+
+<modal #acceptModal>
+  <modal-header>
+    <h3>Accept Leave</h3>
+    <div class="text-right" *ngIf="showleaveType">
+       Total Number Of {{type}} Taken : {{leave_type}}
+    </div>
+  </modal-header>
+  <modal-content>
+    <div class="alert alert-danger" *ngIf="error_status">
+      {{errMessage}}<br>
+    </div>
+    <div class="form-group">
+      <label>Leave Type</label>
+      <select [(ngModel)]="leaveStatus[i]" (ngModelChange)="leaveType(leaveStatus[i])" class="form-control">
+        <option *ngFor="let col of dropvals"  [value]="col">{{col}}</option>
+      </select>
+    </div>
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-danger"  (click)="accept_leave(leaveStatus[i],acceptModal)">Submit</button>
+    <button class="btn btn-close" (click)="acceptModal.close()">Close</button>
+  </modal-footer>
+</modal>
+
+<modal #rejectModal>
+  <modal-header>
+    <h3>Reject Leave</h3>
+  </modal-header>
+  <modal-content>
+    <div class="alert alert-danger" *ngIf="error_status">
+      {{errMessage}}<br>
+    </div>
+
+    <div class="form-group">
+      <label>Rejected Reason</label>
+      <textarea class="form-control" rows="2" [(ngModel)]="saveReason.rejected_reason" id="description"></textarea>
+      </div>
+
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-danger" (click)="reject_leave(rejectModal)">Submit</button>
+    <button class="btn btn-close" (click)="rejectModal.close()">Close</button>
+  </modal-footer>
+</modal>
